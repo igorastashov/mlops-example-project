@@ -6,7 +6,7 @@ Astashov I.V., 2023.
 
 This repository contains model, evaluation code and training code on dataset 
 from [kaggle](https://www.kaggle.com/datasets/lantian773030/pokemonclassification).
-**If you would like to run pretrained model on your image see [(2) Quick start]()**.
+**If you would like to run pretrained model on your image see [(2) Quick start](https://github.com/igorastashov/MLops-project/blob/hw_1/README.md#2-quick-start)**.
 
 
 ## (1) Setup
