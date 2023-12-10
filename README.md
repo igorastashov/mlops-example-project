@@ -6,7 +6,7 @@ Astashov I.V., 2023.
 
 This repository contains model, evaluation code and training code on dataset 
 from [kaggle](https://www.kaggle.com/datasets/lantian773030/pokemonclassification).
-**If you would like to run pretrained model on your image see [(2) Quick start]()**.
+**If you would like to run pretrained model on your image see [(2) Quick start](https://github.com/igorastashov/MLops-project#2-quick-start)**.
 
 
 ## (1) Setup
@@ -48,7 +48,7 @@ Most (if not all) of the images have relatively high quality (correct labels, ce
 The images don't have extremely high resolutions so it's perfect for some light deep learning.
 
 **If the script doesn't work, an alternative will be to download the zip files manually 
-from the [link](https://www.kaggle.com/datasets/lantian773030/pokemonclassification/download?datasetVersionNumber=1).
+from the [link](https://www.kaggle.com/datasets/lantian773030/pokemonclassification).
 One can place the dataset zip files in  `data`, respectively, and then unzip the zip file to set everything up.**
 
 
