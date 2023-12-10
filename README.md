@@ -48,7 +48,7 @@ Most (if not all) of the images have relatively high quality (correct labels, ce
 The images don't have extremely high resolutions so it's perfect for some light deep learning.
 
 **If the script doesn't work, an alternative will be to download the zip files manually 
-from the [link](https://www.kaggle.com/datasets/lantian773030/pokemonclassification).
+from the [link](https://www.kaggle.com/datasets/lantian773030/pokemonclassification/download?datasetVersionNumber=1).
 One can place the dataset zip files in  `data`, respectively, and then unzip the zip file to set everything up.**
 
 
