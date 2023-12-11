@@ -8,6 +8,7 @@ from torchvision.models import mobilenet_v2
 
 from datasets.dataset import create_dataloader
 
+
 train_dataset, test_dataset, _, _ = create_dataloader()
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -29,12 +30,14 @@ def resume_model():
 def transform_data():
     normalize = T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 
-    transform = T.Compose([
-        T.Resize(256),
-        T.CenterCrop(224),
-        T.ToTensor(),
-        normalize,
-    ])
+    transform = T.Compose(
+        [
+            T.Resize(256),
+            T.CenterCrop(224),
+            T.ToTensor(),
+            normalize,
+        ]
+    )
 
     return transform
 

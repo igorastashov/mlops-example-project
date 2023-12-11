@@ -7,6 +7,7 @@ from tqdm import tqdm
 
 from datasets.dataset import create_dataloader
 
+
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
@@ -35,7 +36,7 @@ def training_epoch(model, optimizer, criterion, train_loader_, tqdm_desc):
     train_loss, train_accuracy = 0.0, 0.0
     model.train()
 
-    for i, (images, labels) in enumerate(tqdm(train_loader_, desc=tqdm_desc), 1):
+    for _, (images, labels) in enumerate(tqdm(train_loader_, desc=tqdm_desc), 1):
         images = images.to(device)  # images: batch_size x num_channels x height x width
         labels = labels.to(device)  # labels: batch_size
 

@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
 
+
 bad_images = glob.glob("data/PokemonData/*/*.svg")
 for bad_image in bad_images:
     os.remove(bad_image)
@@ -77,12 +78,14 @@ class PokemonDataset(Dataset):
 def create_dataloader():
     normalize = T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 
-    test_transform = T.Compose([
-        T.Resize(256),
-        T.CenterCrop(224),
-        T.ToTensor(),
-        normalize,
-    ])
+    test_transform = T.Compose(
+        [
+            T.Resize(256),
+            T.CenterCrop(224),
+            T.ToTensor(),
+            normalize,
+        ]
+    )
 
     train_dataset = PokemonDataset(
         root="data/PokemonData",
