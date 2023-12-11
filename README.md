@@ -1,11 +1,11 @@
 ## MLops project
 
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Build Status](https://github.com/igorastashov/MLops-project/actions/workflows/checks.yml/badge.svg)](https://github.com/igorastashov/MLops-project/actions/workflows/checks.yml)
+
 **Pokemon image classification using Mobilenet_v2 model**
 
 Astashov I.V., 2023.
-
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-![Build Status](https://github.com/igorastashov/MLops-project/actions/workflows/Code-checks/badge.svg?branch=main)
 
 This repository contains model, evaluation code and training code on dataset
 from [kaggle](https://www.kaggle.com/datasets/lantian773030/pokemonclassification).
@@ -66,5 +66,3 @@ python train.py
 
 This repository borrows partially from [Isadrtdinov](https://github.com/isadrtdinov/intro-to-dl-hse/blob/2022-2023/seminars/201/seminar_04.ipynb), and [FUlyankin](https://github.com/FUlyankin/deep_learning_pytorch/tree/main/week08_fine_tuning) repositories.
 Repository design taken from [v-goncharenko](https://github.com/v-goncharenko/data-science-template) and [PeterWang512](https://github.com/PeterWang512/CNNDetection).
-
-![Build Status](https://github.com/igorastashov/MLops-project/actions/workflows/checks.yml/bage.svg?branch=main)
