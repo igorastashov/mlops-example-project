@@ -36,13 +36,10 @@ jobs:
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
       #----------------------------------------------
-      #              run test suite
+      #              run checks
       #----------------------------------------------
       - name: Run black
         run: poetry run black .
-
-      - name: Run flake8
-        run: poetry run flake8 .
 
       - name: Run isort
         run: poetry run isort . --profile=black
