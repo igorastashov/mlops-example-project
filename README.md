@@ -20,7 +20,7 @@ from [kaggle](https://www.kaggle.com/datasets/lantian773030/pokemonclassificatio
 
 ### Download model weights
 
-- Run `bash weights/download_weights.sh`;
+- Run `bash weights/download_weights.sh`.
 
 ### Run on a single image
 
@@ -28,7 +28,7 @@ This command runs the model on a single image, and outputs the prediction.
 Put your Pokémon image into the appropriate folder `photo` to test.
 
 ```
-# Model weights need to be downloaded.
+# Model weights need to be downloaded
 python inference.py
 ```
 
