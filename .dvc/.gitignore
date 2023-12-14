@@ -1,3 +1,6 @@
 /config.local
 /tmp
 /cache
+
+#key file dvc
+mlops-cnn-408107-16d4fd90b0e2.json
