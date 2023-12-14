@@ -23,7 +23,12 @@ from [kaggle](https://www.kaggle.com/datasets/lantian773030/pokemonclassificatio
 
 ### Download model weights
 
-- Run `bash weights/download_weights.sh`.
+```
+# Download model weights
+cd weights
+bash download_weights.sh
+cd ../..
+```
 
 ### Run on a single image
 
@@ -41,7 +46,12 @@ python inference.py
 
 A script for downloading the dataset is as follows:
 
-- Run `bash data/download_data.sh`.
+```
+# Download the dataset
+cd data
+bash download_data.sh
+cd ../..
+```
 
 All the 150 Pokémon included in this dataset are from generation one.
 There are around 25 - 50 images for each Pokémon.
