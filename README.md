@@ -21,10 +21,10 @@ from [kaggle](https://www.kaggle.com/datasets/lantian773030/pokemonclassificatio
 
 ## (2) Quick start
 
-### Download model weights
+### Download model and optimizer
 
 ```
-# Download model weights
+# Download model and optimizer
 cd weights
 bash download_weights.sh
 cd ../..
@@ -84,8 +84,8 @@ $ dvc pull
 Example script to train and evaluate model.
 
 ```
-# Train MobileNet_V2
-python train.py
+# Train ConvNet
+python main.py
 ```
 
 ## (A) Acknowledgments

@@ -1,5 +1,7 @@
 import glob
 import os
+from pathlib import Path
+from typing import Any
 
 import torchvision.transforms as T
 from PIL import Image
@@ -8,16 +10,47 @@ from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
 
 
-bad_images = glob.glob("data/PokemonData/*/*.svg")
-for bad_image in bad_images:
-    os.remove(bad_image)
+def remove_bed_images(data_dir: Path):
+    bad_images = glob.glob(f"{data_dir}/*/*.svg")
+    for bad_image in bad_images:
+        os.remove(bad_image)
 
 
-class PokemonDataset(Dataset):
+TRAIN_NORMALIZED_MEAN = [0.485, 0.456, 0.406]
+TRAIN_NORMALIZED_STDEV = [0.229, 0.224, 0.225]
+NORMALIZE = T.Normalize(mean=TRAIN_NORMALIZED_MEAN, std=TRAIN_NORMALIZED_STDEV)
+
+
+def prepare_train_data():
+    """Add Augmentations"""
+    train_transform = T.Compose(
+        [
+            T.RandomResizedCrop(size=224, scale=(0.7, 1.0)),
+            T.RandomHorizontalFlip(),
+            T.ToTensor(),
+            NORMALIZE,
+        ]
+    )
+    return train_transform
+
+
+def prepare_test_data():
+    test_transform = T.Compose(
+        [
+            T.Resize(size=256),
+            T.CenterCrop(size=224),
+            T.ToTensor(),
+            NORMALIZE,
+        ]
+    )
+    return test_transform
+
+
+class PokemonDataset(Dataset[Any]):
     SPLIT_RANDOM_SEED = 42
     TEST_SIZE = 0.25
 
-    def __init__(self, root, train=True, load_to_ram=True, transform=None):
+    def __init__(self, root, train=True, load_to_ram=False, transform=None):
         super().__init__()
         self.root = root
         self.train = train
@@ -75,35 +108,40 @@ class PokemonDataset(Dataset):
         return image, label
 
 
-def create_dataloader():
-    normalize = T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-
-    test_transform = T.Compose(
-        [
-            T.Resize(256),
-            T.CenterCrop(224),
-            T.ToTensor(),
-            normalize,
-        ]
-    )
-
+def create_dataloader(
+    root: Path,
+    batch_size: int,
+    load_to_ram: bool = False,
+    pin_memory: bool = True,
+    num_workers: int = 2,
+) -> tuple[DataLoader[Any], DataLoader[Any]]:
     train_dataset = PokemonDataset(
-        root="data/PokemonData",
+        root=root,
         train=True,
-        load_to_ram=False,
-        transform=test_transform,
+        load_to_ram=load_to_ram,
+        transform=prepare_train_data(),
     )
+
     test_dataset = PokemonDataset(
-        root="data/PokemonData",
+        root=root,
         train=False,
-        load_to_ram=False,
-        transform=test_transform,
+        load_to_ram=load_to_ram,
+        transform=prepare_test_data(),
     )
 
     train_loader = DataLoader(
-        train_dataset, batch_size=32, shuffle=True, pin_memory=True, num_workers=4
+        train_dataset,
+        batch_size=batch_size,
+        shuffle=True,
+        pin_memory=pin_memory,
+        num_workers=num_workers,
     )
     test_loader = DataLoader(
-        test_dataset, batch_size=32, shuffle=False, pin_memory=True, num_workers=4
+        test_dataset,
+        batch_size=batch_size,
+        shuffle=False,
+        pin_memory=pin_memory,
+        num_workers=num_workers,
     )
-    return train_dataset, test_dataset, train_loader, test_loader
+
+    return train_loader, test_loader
