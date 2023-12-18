@@ -10,8 +10,9 @@ from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
 
 
-def remove_bed_images(data_dir: Path):
-    bad_images = glob.glob(f"{data_dir}/*/*.svg")
+def remove_bed_images(root_path: str):
+    data_path = Path(f"{root_path}")
+    bad_images = glob.glob(f"{data_path}/*/*.svg")
     for bad_image in bad_images:
         os.remove(bad_image)
 
@@ -109,21 +110,21 @@ class PokemonDataset(Dataset[Any]):
 
 
 def create_dataloader(
-    root: Path,
+    root_path: str,
     batch_size: int,
     load_to_ram: bool = False,
     pin_memory: bool = True,
     num_workers: int = 2,
 ) -> tuple[DataLoader[Any], DataLoader[Any]]:
     train_dataset = PokemonDataset(
-        root=root,
+        root=Path(f"{root_path}"),
         train=True,
         load_to_ram=load_to_ram,
         transform=prepare_train_data(),
     )
 
     test_dataset = PokemonDataset(
-        root=root,
+        root=Path(f"{root_path}"),
         train=False,
         load_to_ram=load_to_ram,
         transform=prepare_test_data(),
