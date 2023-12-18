@@ -88,7 +88,12 @@ Example script to train and evaluate model.
 python main.py
 ```
 
+**Hydra - hyperparameter management tool.**
+
+If you want to change hyper-parameters such as: `epoch_count`, `lr`, `batch_size`, `momentum`,
+then you can change them in the file `conf/config.yaml`.
+
 ## (A) Acknowledgments
 
 This repository borrows partially from [Isadrtdinov](https://github.com/isadrtdinov/intro-to-dl-hse/blob/2022-2023/seminars/201/seminar_04.ipynb), and [FUlyankin](https://github.com/FUlyankin/deep_learning_pytorch/tree/main/week08_fine_tuning) repositories.
-Repository design taken from [v-goncharenko](https://github.com/v-goncharenko/data-science-template) and [PeterWang512](https://github.com/PeterWang512/CNNDetection).
+Repository design taken from [v-goncharenko](https://github.com/v-goncharenko/data-science-template), [PeterWang512](https://github.com/PeterWang512/CNNDetection) and [ArjanCodes](https://github.com/ArjanCodes/2021-config).
