@@ -1,40 +1,44 @@
-import pathlib
-
+import hydra
 import torch
+from hydra.core.config_store import ConfigStore
+from omegaconf import OmegaConf
 
+from config import ConvNetConfig
 from ds.dataset import create_dataloader, remove_bed_images
 from ds.models import ConvNet
 from ds.runner import train
 
 
-# Hyper parameters
-EPOCH_COUNT = 10
-LR = 1e-2
-MOMENTUM = 0.9
-BATCH_SIZE = 32
-
-# Data configuration
-DATA_DIR = pathlib.Path("data/PokemonData")
-
 # Device
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 
-def main():
+cs = ConfigStore.instance()
+cs.store(name="ConfNet_config", node=ConvNetConfig)
+
+
+@hydra.main(config_path="conf", config_name="config")
+def main(cfg: ConvNetConfig):
+    print(OmegaConf.to_yaml(cfg))
+
     # Model and Optimizer
     model_name = "ConvNet"
     model = ConvNet().to(device)
-    optimizer = torch.optim.SGD(model.parameters(), LR, MOMENTUM)
+    optimizer = torch.optim.SGD(
+        model.parameters(), lr=cfg.params.lr, momentum=cfg.params.momentum
+    )
     criterion = torch.nn.CrossEntropyLoss()
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, EPOCH_COUNT)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+        optimizer=optimizer, T_max=cfg.params.epoch_count
+    )
 
     # Remove bad images
-    remove_bed_images(DATA_DIR)
+    remove_bed_images(cfg.paths.data)
 
     # Create the data loaders
     train_loader, test_loader = create_dataloader(
-        root=DATA_DIR,
-        batch_size=BATCH_SIZE,
+        root_path=cfg.paths.data,
+        batch_size=cfg.params.batch_size,
         load_to_ram=False,
         pin_memory=True,
         num_workers=2,
@@ -48,7 +52,7 @@ def main():
         criterion,
         train_loader,
         test_loader,
-        num_epochs=EPOCH_COUNT,
+        num_epochs=cfg.params.epoch_count,
         device=device,
         title=model_name,
     )

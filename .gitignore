@@ -8,6 +8,7 @@ __pycache__/
 # Folder
 **/PokemonData
 /runs
+outputs
 
 # Weights and optimizer
 weights/model.pt

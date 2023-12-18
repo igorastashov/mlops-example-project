@@ -1,0 +1,9 @@
+defaults:
+  - _self_
+paths:
+  data: ${hydra:runtime.cwd}/data/PokemonData
+params:
+  epoch_count: 10
+  lr: 1e-2
+  batch_size: 32
+  momentum: 0.9
