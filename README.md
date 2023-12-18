@@ -21,10 +21,10 @@ from [kaggle](https://www.kaggle.com/datasets/lantian773030/pokemonclassificatio
 
 ## (2) Quick start
 
-### Download model weights
+### Download model and optimizer
 
 ```
-# Download model weights
+# Download model and optimizer
 cd weights
 bash download_weights.sh
 cd ../..
@@ -59,17 +59,33 @@ All of them with the Pokémon in the center.
 Most (if not all) of the images have relatively high quality (correct labels, centered).
 The images don't have extremely high resolutions so it's perfect for some light deep learning.
 
-**If the script doesn't work, an alternative will be to download the zip files manually
+If the script doesn't work, an alternative will be to download the zip files manually
 from the [link](https://www.kaggle.com/datasets/lantian773030/pokemonclassification/download?datasetVersionNumber=1).
-One can place the dataset zip files in `data`, respectively, and then unzip the zip file to set everything up.**
+One can place the dataset zip files in `data`, respectively, and then unzip the zip file to set everything up.
+
+**PAY ATTENTION**
+
+**This repository runs Data Version Control (DVC) for training and validation data.
+Pre-configured Google Drive remote storage stores raw input data.**
+
+```console
+$ dvc remote list
+my_remote gdrive://1RXz3Mv7OxVveHtQ7c1ZtGgazDh6bPFJz
+```
+
+You can run `dvc pull` to download the data:
+
+```console
+$ dvc pull
+```
 
 ## (4) Train and Evaluation model
 
 Example script to train and evaluate model.
 
 ```
-# Train MobileNet_V2
-python train.py
+# Train ConvNet
+python main.py
 ```
 
 ## (A) Acknowledgments

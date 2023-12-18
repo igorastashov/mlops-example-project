@@ -1,56 +1,58 @@
 import os
+import pathlib
 
 import requests
 import torch
-import torchvision.transforms as T
 from PIL import Image
-from torchvision.models import mobilenet_v2
 
-from datasets.dataset import create_dataloader
+from ds.dataset import prepare_test_data
+from ds.models import ConvNet
 
 
-train_dataset, test_dataset, _, _ = create_dataloader()
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+# Hyper parameters
+EPOCH_COUNT = 10
+LR = 1e-2
+MOMENTUM = 0.9
+
+# Data configuration
+DATA_DIR = pathlib.Path("data/PokemonData")
+
+# Device
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+
+# Transform data
+TRANSFORM = prepare_test_data()
 
 
 def resume_model():
-    model = mobilenet_v2()
-
-    model.classifier[1] = torch.nn.Linear(1280, len(train_dataset.classes))
-    model = model.to(device)
+    model = ConvNet().to(device)
+    optimizer = torch.optim.SGD(model.parameters(), LR, MOMENTUM)
 
     model.load_state_dict(
         torch.load("weights/model.pt", map_location=torch.device(device))
     )
-    model = model.to(device)
+    optimizer.load_state_dict(
+        torch.load("weights/optimizer.pt", map_location=torch.device(device))
+    )
+
     model.eval()
     return model
 
 
-def transform_data():
-    normalize = T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-
-    transform = T.Compose(
-        [
-            T.Resize(256),
-            T.CenterCrop(224),
-            T.ToTensor(),
-            normalize,
-        ]
-    )
-
-    return transform
+def dataset_labels(class_id):
+    classes = sorted(os.listdir(DATA_DIR))
+    label = classes[class_id]
+    return label
 
 
 @torch.no_grad()
 def predict(image):
     model = resume_model()
-    transform = transform_data()
-
-    probs = model(transform(image).unsqueeze(0).to(device)).squeeze().softmax(dim=0)
-
-    class_id = probs.argmax().item()
-    label = test_dataset.classes[class_id]
+    probabilities = (
+        model(TRANSFORM(image).unsqueeze(0).to(device)).squeeze().softmax(dim=0)
+    )
+    class_id = probabilities.argmax().item()
+    label = dataset_labels(class_id)
 
     # API for find info about Pokémon
     pokemon = label.lower()
@@ -59,7 +61,7 @@ def predict(image):
 
     print(
         f"class ID: {class_id}, class name: {label}, "
-        f"confidence: {100 * probs[class_id].item():.2f}%"
+        f"confidence: {100 * probabilities[class_id].item():.2f}%"
     )
 
     print("Name: ", r.json()["name"])
