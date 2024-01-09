@@ -18,7 +18,9 @@ def training_epoch(
     train_loss, train_accuracy = 0.0, 0.0
     model.train()
 
-    for _, (images, labels) in enumerate(tqdm(train_loader, desc=tqdm_desc), 1):
+    for _, (images, labels) in enumerate(
+        tqdm(train_loader, desc=tqdm_desc, dynamic_ncols=True), 1
+    ):
         images = images.to(device)  # images: batch_size x num_channels x height x width
         labels = labels.to(device)  # labels: batch_size
 
@@ -71,6 +73,8 @@ def train(
     train_losses, train_accuracies = [], []
     test_losses, test_accuracies = [], []
 
+    best_test_loss = float('inf')
+
     for epoch in range(1, num_epochs + 1):
         train_loss, train_accuracy = training_epoch(
             model,
@@ -95,6 +99,13 @@ def train(
         train_accuracies += [train_accuracy]
         test_losses += [test_loss]
         test_accuracies += [test_accuracy]
+
+        # Save model and optimizer
+        if test_loss < best_test_loss:
+            best_test_loss = test_loss
+
+            torch.save(model.state_dict(), "weights/model.pt")
+            torch.save(optimizer.state_dict(), "weights/optimizer.pt")
 
     plot_losses(train_losses, test_losses, train_accuracies, test_accuracies, title)
 
