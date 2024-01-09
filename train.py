@@ -1,36 +1,30 @@
 import hydra
 import torch
-from hydra.core.config_store import ConfigStore
-from omegaconf import OmegaConf
+from omegaconf import DictConfig
 
-from config import ConvNetConfig
 from ds.dataset import create_dataloader, remove_bed_images
 from ds.models import ConvNet
 from ds.runner import train
 
 
-# Device
-device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-
-
-cs = ConfigStore.instance()
-cs.store(name="ConfNet_config", node=ConvNetConfig)
-
-
-@hydra.main(config_path="conf", config_name="config")
-def main(cfg: ConvNetConfig):
-    print(OmegaConf.to_yaml(cfg))
+@hydra.main(config_path="conf", config_name="config", version_base=None)
+def main(cfg: DictConfig):
+    # Device
+    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
     # Model and Optimizer
-    model_name = "ConvNet"
+    model_name = cfg.model.name
     model = ConvNet().to(device)
+
     optimizer = torch.optim.SGD(
         model.parameters(), lr=cfg.params.lr, momentum=cfg.params.momentum
     )
-    criterion = torch.nn.CrossEntropyLoss()
+
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
         optimizer=optimizer, T_max=cfg.params.epoch_count
     )
+
+    criterion = torch.nn.CrossEntropyLoss()
 
     # Remove bad images
     remove_bed_images(cfg.paths.data)
